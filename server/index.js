@@ -5,6 +5,7 @@ import cors from "cors";
 import connectDB from "./mongoDB/connect.js";
 import dalleRoutes from "../server/routes/dalleRoutes.js";
 import postRoutes from "../server/routes/postRoutes.js";
+import authRoutes from "../server/routes/authRoutes.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(cors());
 app.use("/api/v1/post", postRoutes);
 app.use("/api/v1/dalle", dalleRoutes);
+app.use("/api/v1/auth/register", authRoutes);
 
 app.get("/", async (req, res) => {
   res.send("Hello from Dall -E!");
