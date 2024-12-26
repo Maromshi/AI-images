@@ -29,20 +29,25 @@ router.route("/register").post(async (req, res) => {
 router.route("/login").post(async (req, res) => {
   try {
     const { email, password } = req.body;
-    const userExisting = User.findOne({ email });
+    const userExisting = await User.findOne({ email });
+
     if (userExisting) {
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, userExisting.password);
       if (!isMatch) {
         return res.status(400).json({ message: "Invalid credentials" });
       }
     }
+    if (!userExisting) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
     // Create token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    const token = jwt.sign({ id: userExisting._id }, process.env.JWT_SECRET, {
+      expiresIn: "4h",
     });
     res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: error });
   }
 });
 export default router;
