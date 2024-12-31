@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRandomPrompt } from "../utils/index";
 import Loader from "../components/Loader";
 import FormField from "../components/FormField";
 import preview from "../assets/preview.png";
+import AuthContext from "../Contexts/AuthContext";
 
 export const CreatePost = () => {
+  // using context
+  const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     prompt: "",
     photo: "",
   });
+
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Creating img
   const generateImage = async () => {
     if (form.prompt) {
       try {
@@ -35,8 +40,15 @@ export const CreatePost = () => {
       alert("Pls enter a prompt");
     }
   };
+
+  // Sending details - only logged in users
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Check if user logged in
+    if (!isAuthenticated) {
+      alert("You must be logged in to share!");
+      return;
+    }
     if (!form.name || !form.prompt || !form.photo) {
       alert("Please fill out all fields before sharing.");
       return;

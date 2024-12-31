@@ -4,7 +4,7 @@ const AuthContext = createContext(); // create place to keep states
 
 // Provide states (data) to rest off the app
 // Children - all components will gets access to provider
-export const authProvidor = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // If user login or not
   const [token, setToken] = useState(localStorage.getItem("token") || null); // save token
 
@@ -24,6 +24,7 @@ export const authProvidor = ({ children }) => {
     setIsAuthenticated(true);
   };
 
+  // Logout user
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null); // remove existing token
@@ -39,3 +40,4 @@ export const authProvidor = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+export default AuthContext;
