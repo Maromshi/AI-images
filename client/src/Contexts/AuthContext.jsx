@@ -3,11 +3,14 @@ import React, { createContext, useState, useEffect } from "react";
 const AuthContext = createContext(); // create place to keep states
 
 // Provide states (data) to rest off the app
-// Children - all components will gets access to provider
-export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // If user login or not
-  const [token, setToken] = useState(localStorage.getItem("token") || null); // save token
 
+export const AuthProvider = ({ children }) => {
+  // If token -> true  else -> false
+  // Take the information from localstorage
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  );
+  const [token, setToken] = useState(localStorage.getItem("token") || null); // save token
   // Check if there is token in case refresh page.
   useEffect(() => {
     if (token) {
@@ -23,7 +26,6 @@ export const AuthProvider = ({ children }) => {
     setToken(newToken);
     setIsAuthenticated(true);
   };
-
   // Logout user
   const logout = () => {
     localStorage.removeItem("token");

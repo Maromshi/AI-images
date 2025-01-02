@@ -6,6 +6,7 @@ import { CreatePost } from "./pages/CreatePost";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { AuthProvider } from "./Contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   return (
@@ -17,7 +18,10 @@ export default function App() {
 
         <main className="sm:p-8 px-4 py-8 w-full bg-[#f9fafe] min-h-[calc(100vh-73px)]">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route element={<ProtectedRoute />}>
+              {/*Home page is protected */}
+              <Route path="/" element={<Home />} />
+            </Route>
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/Login" element={<Login />} />
           </Routes>

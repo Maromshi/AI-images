@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
+import AuthContext from "../Contexts/AuthContext";
 
 export const Login = () => {
+  const { login } = useContext(AuthContext); // login function
   const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
@@ -11,6 +13,7 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await fetch("http://localhost:8080/api/v1/auth/login", {
         method: "POST",
@@ -20,7 +23,7 @@ export const Login = () => {
       const data = await response.json();
       //   console.log(data);
       if (response.ok) {
-        localStorage.setItem("token", data.token); // keep token in local storage
+        login(data.token); // save token in localstorage
         navigate("/"); // navigate home page
       } else {
         alert(data.message || "Login failed ");
