@@ -24,10 +24,12 @@ export const Home = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        const token = localStorage.getItem("token"); // get online user
         const response = await fetch("http://localhost:8080/api/v1/post", {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
+            // "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // send token to autorized
           },
         });
         const result = await response.json();
