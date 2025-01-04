@@ -4,11 +4,10 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
-
-import Post from "../mongodb/models/post.js";
+import Post from "../mongoDB/models/post.js";
+import { authenticate } from "../middleware/authMiddleware.js";
 
 dotenv.config();
-
 const router = express.Router();
 
 cloudinary.config({
@@ -17,10 +16,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Get all posts
-router.get("/", async (req, res) => {
+// Get all posts - protected by authenticate
+router.get("/", authenticate, async (req, res) => {
   try {
-    const posts = await Post.find();
+    const userId = req.user.id; // get the token from the user
+    // console.log(userId);
+    const posts = await Post.find({ userId }); // only from the user!
     res.status(200).json({ success: true, data: posts });
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -28,10 +29,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Create Post
-router.route("/").post(async (req, res) => {
+// Create Post - protected by authenticate
+router.post("/", authenticate, async (req, res) => {
   try {
-    const { name, prompt, photo } = req.body; // from the client
+    const { name, prompt, photo } = req.body;
+    const userId = req.user.id; // get the token from the user
+
     if (!photo) {
       return res.status(400).json({ error: "Photo is required" });
     }
@@ -40,7 +43,8 @@ router.route("/").post(async (req, res) => {
     const newPost = await Post.create({
       name,
       prompt,
-      photo: photoUrl.url, // url adress
+      photo: photoUrl.url, // url adress,
+      userId,
     });
 
     res.status(201).json({ success: true, data: newPost });
