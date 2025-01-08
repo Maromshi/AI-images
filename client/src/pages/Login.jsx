@@ -64,6 +64,13 @@ export const Login = () => {
           >
             Login
           </button>
+          <button
+            type="button"
+            className="font-inter font-medium bg-gray-200 text-black px-4 py-2 rounded-md"
+            onClick={() => navigate("/register")}
+          >
+            Sign up
+          </button>
         </div>
       </form>
     </section>

@@ -24,6 +24,7 @@ export default function App() {
             </Route>
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/Login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
       </AuthProvider>
