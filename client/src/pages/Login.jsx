@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import AuthContext from "../Contexts/AuthContext";
+import Swal from "sweetalert2";
 
 export const Login = () => {
   const { login } = useContext(AuthContext); // login function
@@ -21,15 +22,27 @@ export const Login = () => {
         body: JSON.stringify(form),
       });
       const data = await response.json();
-      //   console.log(data);
+
       if (response.ok) {
         login(data.token); // save token in localstorage
         navigate("/"); // navigate home page
       } else {
-        alert(data.message || "Login failed ");
+        Swal.fire({
+          title: "Error!",
+          text: data.message || "Registration failed",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+        // alert(data.message || "Login failed ");
       }
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      Swal.fire({
+        title: "Error!",
+        text: "An error occurred. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      // alert("An error occurred. Please try again.");
     }
   };
   const handleChange = (e) => {

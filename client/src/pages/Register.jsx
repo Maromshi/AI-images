@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
+import Swal from "sweetalert2";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -23,13 +24,29 @@ export const Register = () => {
       );
       const data = await response.json();
       if (response.ok) {
-        alert("Registration successful! Please log in.");
-        navigate("/login"); // מעבר לדף הלוגין לאחר רישום
+        Swal.fire({
+          title: "Registration successful!",
+          text: data.message || "Registration successful! Please log in",
+          icon: "success",
+        });
+        // alert("Registration successful! Please log in.");
+        navigate("/login");
       } else {
-        alert(data.message || "Registration failed.");
+        Swal.fire({
+          title: "Error!",
+          text: data.message || "Registration failed",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
       }
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      Swal.fire({
+        title: "Error!",
+        text: data.message || "Registration failed",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+      // alert("An error occurred. Please try again.");
     }
   };
 
